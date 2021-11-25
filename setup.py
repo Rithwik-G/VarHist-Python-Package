@@ -5,15 +5,16 @@ with open("README.md", "r") as fh:
 
 setup(
 	name='varhist',
-	version='0.0.1',
+	version='0.0.8',
 	description='Get Variable History of specific variables',
 	long_description=long_description,
 	extras_require = {
 		"dev" : [
 			"pytest>=3.7",
+			"check-manifest",
 		]
 	},
-	long_description_content_type="markdown",
+	long_description_content_type="text/markdown",
 	py_modules=["varhist"],
 	package_dir={'': 'src'},
 	classifiers=[

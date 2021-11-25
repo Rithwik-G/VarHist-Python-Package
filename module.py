@@ -1,4 +1,5 @@
-import traceback
+import traceback, sys
+
 class varhist:
 
 	HIST = {}
@@ -41,25 +42,30 @@ class varhist:
 		return self.trace
 
 
-
+	@classmethod
+	def track(self, *var_names):
+		for var_name in var_names:
+			self.checking.append(var_name.split('.'))
 
 	@classmethod
-	def track(self, var_name):
-		self.checking.append(var_name.split('.'))
+	def history(self, *var_names):
+		br = False
+		for var_name in var_names:
+			if br:
+				print('\n')
+			if var_name not in self.HIST and var_name.split('.') not in self.checking:
+				raise ValueError(f'Variable is not being tracked. Use VarHist.track({var_name}).')
 
-	@classmethod
-	def history(self, var_name):
-		if var_name not in self.HIST and var_name.split('.') not in self.checking:
-			raise ValueError(f'Variable is not being tracked. Use VarHist.track({var_name}).')
+			elif var_name.split('.') in self.checking and var_name not in self.HIST:
+				print(f'Variable \'{var_name}\' was never created.')
+			else:
+				print(f'----------Start of History for \'{var_name}\'----------')
+				for value in self.HIST[var_name]:
+					print(f"Variable '{var_name}' changed to '{value[0]}' on line '{value[1]}' in function '{value[2]}'")
 
-		elif var_name.split('.') in self.checking and var_name not in self.HIST:
-			print(f'Variable \'{var_name}\' was never created.')
-		else:
-			print(f'----------Start of History for \'{var_name}\'----------')
-			for value in self.HIST[var_name]:
-				print(f"Variable '{var_name}' changed to '{value[0]}' on line '{value[1]}' in function '{value[2]}'")
+				print(f'----------End of History for \'{var_name}\'----------')
 
-			print(f'----------End of History for \'{var_name}\'----------')
+			br = True
 
 
 
